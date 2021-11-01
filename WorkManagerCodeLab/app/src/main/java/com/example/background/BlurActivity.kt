@@ -51,6 +51,8 @@ class BlurActivity : AppCompatActivity() {
                 }
             }
         }
+
+        binding.cancelButton.setOnClickListener { viewModel.cancelWork() }
     }
 
     private fun workInfosObserver(): Observer<List<WorkInfo>> {
@@ -69,22 +71,21 @@ class BlurActivity : AppCompatActivity() {
             // Every continuation has only one worker tagged TAG_OUTPUT
             val workInfo = listOfWorkInfo[0]
 
-            if (workInfo.state.isFinished)
-                if (workInfo.state.isFinished) {
-                    showWorkFinished()
+            if (workInfo.state.isFinished) {
+                showWorkFinished()
 
-                    // Normally this processing, which is not directly related to drawing views on
-                    // screen would be in the ViewModel. For simplicity we are keeping it here.
-                    val outputImageUri = workInfo.outputData.getString(KEY_IMAGE_URI)
+                // Normally this processing, which is not directly related to drawing views on
+                // screen would be in the ViewModel. For simplicity we are keeping it here.
+                val outputImageUri = workInfo.outputData.getString(KEY_IMAGE_URI)
 
-                    // If there is an output file show "See File" button
-                    if (!outputImageUri.isNullOrEmpty()) {
-                        viewModel.setOutputUri(outputImageUri)
-                        binding.seeFileButton.visibility = View.VISIBLE
-                    }
-                } else {
-                    showWorkInProgress()
+                // If there is an output file show "See File" button
+                if (!outputImageUri.isNullOrEmpty()) {
+                    viewModel.setOutputUri(outputImageUri)
+                    binding.seeFileButton.visibility = View.VISIBLE
                 }
+            } else {
+                showWorkInProgress()
+            }
         }
     }
 

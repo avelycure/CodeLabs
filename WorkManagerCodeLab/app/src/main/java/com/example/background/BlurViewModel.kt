@@ -115,6 +115,14 @@ class BlurViewModel(application: Application) : ViewModel() {
         outputUri = uriOrNull(outputImageUri)
     }
 
+    /**
+     * In this case, you'll want to cancel work by unique chain name,
+     * because you want to cancel all work in the chain, not just a particular step.
+     */
+    internal fun cancelWork() {
+        workManager.cancelUniqueWork(IMAGE_MANIPULATION_WORK_NAME)
+    }
+
     class BlurViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
